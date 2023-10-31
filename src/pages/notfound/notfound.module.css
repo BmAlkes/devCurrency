@@ -1,0 +1,29 @@
+.container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container h1 {
+  margin-bottom: 14px;
+  color: #fff;
+  margin-top: 24px;
+}
+
+.container a {
+  text-decoration: none;
+  color: #fff;
+  background-color: #575757;
+  padding: 8px 24px;
+  border-radius: 8px;
+  transition: transform 0.5s ease;
+}
+
+.container a:hover {
+  transform: scale(1.08);
+  background-color: #30beff;
+}

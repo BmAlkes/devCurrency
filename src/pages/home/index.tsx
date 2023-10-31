@@ -1,10 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./home.module.css";
 import { BiSearch } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
 // https://coinlib.io/api/v1/coinlist?key=9142109afd1d8501
-interface CoinsProps {
+export interface CoinsProps {
   name: string;
   price: string;
   delta_24h: string;
@@ -13,13 +13,17 @@ interface CoinsProps {
   market_cap: string;
   formatedPrice: string;
   formatedMarket: string;
+  numberDelta: number;
 }
 
-interface DataProps {
+export interface DataProps {
   coins: CoinsProps[];
 }
 export const Home = () => {
   const [coins, setCoins] = useState<CoinsProps[]>([]);
+  const [inputValue, setInputValue] = useState("");
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getData() {
@@ -34,26 +38,39 @@ export const Home = () => {
           });
           const coinsData = data.coins.slice(0, 22);
           const formatResult = coinsData.map((item) => {
+            console.log(item);
             const formatted = {
               ...item,
               formatedPrice: price.format(Number(item.price)),
               formatedMarket: price.format(Number(item.market_cap)),
+              numberDelta: parseFloat(
+                item.delta_24h.toString().replace(",", ".")
+              ),
             };
             return formatted;
           });
-          console.log(formatResult);
           setCoins(formatResult);
         })
         .catch((err) => {
-          console.log(err);
+          console.log(err.message);
         });
     }
     getData();
   }, []);
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (inputValue === " ") return;
+    navigate(`/detail/${inputValue} `);
+  };
   return (
     <main className={styles.container}>
-      <form className={styles.form}>
-        <input placeholder=" Search the symbol of coin: BTC" />
+      <form className={styles.form} onSubmit={handleSearch}>
+        <input
+          placeholder=" Search the symbol of coin: BTC"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
         <button type="submit">
           <BiSearch size={30} color="#fff" />
         </button>
@@ -70,7 +87,6 @@ export const Home = () => {
         </thead>
         <tbody id="tbody">
           {coins.map((coin) => {
-            console.log(coin);
             return (
               <tr className={styles.tr} key={coin.name}>
                 <td className={styles.tdLabel} data-label="coins">
@@ -86,7 +102,7 @@ export const Home = () => {
                 </td>
                 <td
                   className={
-                    Number(coin?.delta_24h) >= 0
+                    coin.numberDelta && coin.numberDelta >= 0
                       ? styles.tdProfit
                       : styles.tdLoss
                   }
