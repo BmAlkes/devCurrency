@@ -22,14 +22,18 @@ export const Home = () => {
         </thead>
         <tbody id="tbody">
           <tr className={styles.tr}>
-            <td className={styles.tdLabel}>
-              <Link to="/detail/btc">
-                <span className={styles.link}>Bitcoin</span> | BTC
+            <td className={styles.tdLabel} data-label="coins">
+              <Link to="/detail/btc" className={styles.link}>
+                <span>Bitcoin</span> | BTC
               </Link>
             </td>
-            <td className={styles.tdLabel}>$122</td>
-            <td className={styles.tdLabel}>$122</td>
-            <td className={styles.tdProfit}>
+            <td className={styles.tdLabel} data-label="Market Value">
+              $122
+            </td>
+            <td className={styles.tdLabel} data-label="price">
+              $122
+            </td>
+            <td className={styles.tdLoss} data-label="volume">
               <span>-5.3</span>
             </td>
           </tr>
